@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.3.2)
 
 set(CMAKE_C_FLAGS "-O3 -Wall")
 
