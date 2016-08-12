@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
+#include <windows.h>
 
 #include "kss/kss.h"
 #include "kssplay.h"
@@ -23,18 +22,16 @@ int main(int argc, char** argv) {
   KSSPLAY_set_data(kssplay, kss);
   KSSPLAY_reset(kssplay, 2 < argc ? atoi(argv[2]) : 0, 0);
 
-  struct timeval now, next, tick, diff;
-  gettimeofday(&now, NULL);
-  tick.tv_sec = 0;
-  tick.tv_usec = 1000 * 1000 / 60;
-
+  LARGE_INTEGER now, tick, next, diff;
+  tick.QuadPart = 1000 * 1000 / 60;
+  QueryPerformanceCounter(&now);
   for (;;) {
-    timeradd(&now, &tick, &next);
+    next.QuadPart = now.QuadPart + tick.QuadPart;
     KSSPLAY_calc_silent(kssplay, 735);
-    gettimeofday(&now, NULL);
-    if (timercmp(&now, &next, <)) {
-      timersub(&next, &now, &diff);
-      usleep(diff.tv_usec);
+    QueryPerformanceCounter(&now);
+    if (now.QuadPart < next.QuadPart) {
+      diff.QuadPart = now.QuadPart - next.QuadPart;
+      Sleep(-diff.QuadPart / 1000);
     }
     now = next;
   }
