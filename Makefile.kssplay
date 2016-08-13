@@ -1,5 +1,4 @@
 LIBS= -L. -lkss \
-     -Lmodules/emu2212 -lemu2212 \
      -Lmodules/emu2413 -lemu2413 \
      -Lmodules/emu8950 -lemu8950 \
      -Lmodules/emu76489 -lemu76489 \
@@ -16,6 +15,6 @@ kssplay_i2c.exe: kssplay_i2c.c sound_cortex.c
 	gcc $^ -o $@ $(INCS) $(LIBS) -lusb
 
 kssplay_dsp.exe: kssplay_dsp.c
-	gcc $< -o $@ $(INCS) $(LIBS) -Lmodules/emu2149 -lemu2149
+	gcc $< -o $@ $(INCS) $(LIBS) -Lmodules/emu2149 -lemu2149 -lemu2212
 
 all: kssplay_i2c.exe kssplay_dsp.exe
